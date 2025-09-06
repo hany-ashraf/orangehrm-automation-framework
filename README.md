@@ -14,7 +14,8 @@ Built with scalability and reusability in mind, it ensures that all critical mod
 
 ---
 
-Performance reviews# **OrangeHRM**  
+## Performance reviews
+**OrangeHRM**  
 ## ![OrangeHRM_Logo](Logo.png)
 
 

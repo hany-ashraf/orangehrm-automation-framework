@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Running positive scenarios for login feature">
+    
+    <parameter name="browser" value=""/>
+    <parameter name="URL" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>
+    <test verbose = "2" preserve-order = "true" name="Check login with correct credential">
+        <classes>
+            <class name="testcases.TC01_CheckLogin">
+                <methods>
+                    <include name="validateWithLoginData_P"/>
+                </methods>
+            </class>
+        </classes>
+
+    </test>
+</suite>

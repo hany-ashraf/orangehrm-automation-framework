@@ -27,9 +27,9 @@ public class TestBase {
         MyScreenRecorder.startRecording("Login_Test");
     }
 
-    @Parameters({"browser", "URL","device"})
+    @Parameters({"browser", "device"})
     @BeforeTest
-    public void setupDriver(@Optional String browser, String URL,@Optional String device) throws Exception {
+    public void setupDriver(@Optional String browser, @Optional String device) throws Exception {
 
         if (browser == null) browser = "";
 

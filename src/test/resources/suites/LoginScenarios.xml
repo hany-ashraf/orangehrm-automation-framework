@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Running positive scenarios for login feature">
 
-    <parameter name="device" value="iPhone X"/>
+    <parameter name="device" value="iPhone 14"/>
     <parameter name="browser" value="safari"/>
 
     <parameter name="URL" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>

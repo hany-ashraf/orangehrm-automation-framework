@@ -34,13 +34,13 @@ public class TestBase {
         if (browser == null) browser = "";
 
 
-        if (device != null && !device.equalsIgnoreCase("desktop") && !device.isEmpty()) {
+    /*    if (device != null && !device.equalsIgnoreCase("desktop") && !device.isEmpty()) {
             // Use mobile emulation with device from XML
             setDriver(Utility.createMobileDriver(device));
         } else {
             // Use normal browser
             setDriver(getNewInstance(browser));
-        }
+        }*/
 
         // 2. Create DevTools session
         //devTools = ((HasDevTools) getDriver()).getDevTools();

@@ -2,13 +2,13 @@ name: Run Selenium Tests on Safari
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "safari-tests" ]   # Only trigger on this branch
   pull_request:
     branches: [ "main" ]
 
 jobs:
   test-safari:
-    runs-on: macos-latest   # Safari only runs on macOS
+    runs-on: macos-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

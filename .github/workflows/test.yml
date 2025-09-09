@@ -1,10 +1,9 @@
-name: Run Selenium Tests on Safari
+name: Run Selenium Test on Safari
 
 on:
   push:
-    branches: [ "safari-tests" ]   # Only trigger on this branch
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "safari-tests" ]
+  workflow_dispatch:   # lets you trigger manually from GitHub Actions tab
 
 jobs:
   test-safari:
@@ -19,10 +18,10 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Start Safari Driver
+      - name: Enable Safari Driver
         run: |
-          safaridriver --enable
+          sudo safaridriver --enable
           safaridriver --version
 
-      - name: Run Tests
-        run: mvn clean test -Dbrowser=safari
+      - name: Run Specific Test
+        run: mvn clean test -Dtest=testcases.TC01_CheckLogin#validateWithLoginData_P -Dbrowser=safari

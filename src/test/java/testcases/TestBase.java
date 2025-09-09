@@ -29,7 +29,7 @@ public class TestBase {
 
     @Parameters({"browser", "URL","device"})
     @BeforeTest
-    public void setupDriver(@Optional String browser, String URL, String device) throws Exception {
+    public void setupDriver(@Optional String browser, String URL,@Optional String device) throws Exception {
 
         if (browser == null) browser = "";
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
-    <parameter name="browser" value=""/>
+    <parameter name="URL" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>
+    <parameter name="browser" value="safari"/>
     <suite-files>
         <suite-file path="src/test/resources/suites/LoginScenarios.xml"/>
 <!--        <suite-file path="src/test/resources/suites/HomeScenarios.xml"/>-->

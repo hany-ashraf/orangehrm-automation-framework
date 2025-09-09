@@ -1,9 +1,9 @@
 package actions;
 
-import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.annotation.Nullable;
 import java.time.Duration;
 import java.util.List;
 

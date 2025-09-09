@@ -3,7 +3,12 @@ package util;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v128.network.Network;
+import org.openqa.selenium.devtools.v128.network.model.ConnectionType;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.FileReader;
@@ -32,7 +37,6 @@ public class Utility {
     /**
      * This method generate name (firstName and lastName)
      * with a criteria in general name should be from 20 to 30 capital characters
-     *
      * @return name
      */
     public static String generateRandomName() {
@@ -360,5 +364,97 @@ public class Utility {
         // Use regex to keep only digits
         return text.replaceAll("[^0-9]", "");
     }
+
+/*    public static void emulateNetwork(DevTools devTools, String networkType) {
+        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+
+        switch (networkType.toLowerCase()) {
+            case "2g":
+                devTools.send(Network.emulateNetworkConditions(
+                        false,
+                        300,                                // latency (ms)
+                        250 * 1024 / 8,                     // ~250 kbps download
+                        50 * 1024 / 8,                      // ~50 kbps upload
+                        Optional.of(ConnectionType.CELLULAR2G),
+                        Optional.empty(),                   // packetLoss
+                        Optional.empty(),                   // packetQueueLength
+                        Optional.empty()                    // packetReordering
+                ));
+                break;
+
+            case "3g":
+                devTools.send(Network.emulateNetworkConditions(
+                        false,
+                        150,
+                        750 * 1024 / 8,
+                        250 * 1024 / 8,
+                        Optional.of(ConnectionType.CELLULAR3G),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty()
+                ));
+                break;
+
+            case "4g":
+                devTools.send(Network.emulateNetworkConditions(
+                        false,
+                        70,
+                        4 * 1024 * 1024 / 8,
+                        3 * 1024 * 1024 / 8,
+                        Optional.of(ConnectionType.CELLULAR4G),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty()
+                ));
+                break;
+
+            case "offline":
+                devTools.send(Network.emulateNetworkConditions(
+                        true,                               // offline
+                        0,
+                        0,
+                        0,
+                        Optional.of(ConnectionType.NONE),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty()
+                ));
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unsupported network type: " + networkType);
+        }
+    }*/
+
+    public static WebDriver createMobileDriver(String deviceName) {
+        Map<String, Object> deviceMetrics = new HashMap<>();
+        deviceMetrics.put("width", 375);
+        deviceMetrics.put("height", 812);
+        deviceMetrics.put("pixelRatio", 3.0);
+
+        Map<String, Object> mobileEmulation = new HashMap<>();
+        mobileEmulation.put("deviceMetrics", deviceMetrics);
+        mobileEmulation.put("userAgent",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 13_0 like Mac OS X) " +
+                        "AppleWebKit/605.1.15 (KHTML, like Gecko) " +
+                        "Version/13.0 Mobile/15E148 Safari/604.1");
+
+        ChromeOptions options = new ChromeOptions();
+        options.setExperimentalOption("mobileEmulation", mobileEmulation);
+
+        // Improve scaling
+        options.addArguments("--force-device-scale-factor=1");
+        options.addArguments("--window-size=375,812");
+
+        return new ChromeDriver(options);
+    }
+
+
+
+    public static WebDriver createDesktopDriver() {
+        return new ChromeDriver();
+    }
+
+
 }
 

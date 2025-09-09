@@ -24,7 +24,7 @@
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <selenium.java.version>4.34.0</selenium.java.version>
+        <selenium.java.version>4.24.0</selenium.java.version>
         <testng.version>7.8.0</testng.version>
     </properties>
 
@@ -146,12 +146,34 @@
         </plugins>
     </build>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.java.version}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.seleniumhq.selenium</groupId>-->
+<!--            <artifactId>selenium-devtools-v126</artifactId>-->
+<!--            <version>4.24.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.seleniumhq.selenium</groupId>-->
+<!--            <artifactId>selenium-java</artifactId>-->
+<!--            <version>4.24.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.seleniumhq.selenium</groupId>-->
+<!--            <artifactId>selenium-java</artifactId>-->
+<!--            <version>4.24.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.seleniumhq.selenium</groupId>-->
+<!--            <artifactId>selenium-devtools-v136</artifactId>-->
+<!--            <version>4.24.0</version>-->
+<!--        </dependency>-->
+
+
+
         <!-- https://mvnrepository.com/artifact/org.testng/testng -->
         <dependency>
             <groupId>org.testng</groupId>
@@ -185,11 +207,11 @@
         </dependency>
 
         <!-- Selenium WebDriver -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>4.15.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.seleniumhq.selenium</groupId>-->
+<!--            <artifactId>selenium-java</artifactId>-->
+<!--            <version>4.15.0</version>-->
+<!--        </dependency>-->
 
         <!-- Apache Commons IO -->
         <dependency>

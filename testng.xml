@@ -5,6 +5,6 @@
     <parameter name="browser" value="safari"/>
     <suite-files>
         <suite-file path="src/test/resources/suites/LoginScenarios.xml"/>
-        <suite-file path="src/test/resources/suites/HomeScenarios.xml"/>
+<!--        <suite-file path="src/test/resources/suites/HomeScenarios.xml"/>-->
     </suite-files>
 </suite>

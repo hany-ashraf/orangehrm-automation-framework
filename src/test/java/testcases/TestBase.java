@@ -33,6 +33,8 @@ public class TestBase {
 
         if (browser == null) browser = "";
 
+        setDriver(getNewInstance(browser));
+
 
     /*    if (device != null && !device.equalsIgnoreCase("desktop") && !device.isEmpty()) {
             // Use mobile emulation with device from XML

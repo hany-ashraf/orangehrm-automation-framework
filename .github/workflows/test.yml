@@ -24,4 +24,4 @@ jobs:
           safaridriver --version
 
       - name: Run Specific Test
-        run: mvn clean test -Dtest=testcases.TC01_CheckLogin#validateWithLoginData_P -Dbrowser=safari
+        run: mvn clean verify #-Dtest=testcases.TC01_CheckLogin#validateWithLoginData_P -Dbrowser=safari

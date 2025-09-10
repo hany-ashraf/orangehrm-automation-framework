@@ -50,7 +50,7 @@ public class TestBase {
 
 
         // implicit wait
-        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+//        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
         getDriver().get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
 

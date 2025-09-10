@@ -13,7 +13,8 @@ public class TC01_CheckLogin extends TestBase {
     String url = "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index";
     @Test(priority = 1, description = "Login With Valid Data")
     public void validateWithLoginData_P() throws InterruptedException {
-//        new P01_LoginPage(getDriver()).fillUserName(user).fillPassword(password);
+        Thread.sleep(20000);
+        new P01_LoginPage(getDriver()).fillUserName(user).fillPassword(password);
 //        Thread.sleep(2000);
 //        new P01_LoginPage(getDriver()).clickLoginButton();
 //

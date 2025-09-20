@@ -33,7 +33,7 @@ jobs:
           rm -rf docs
           mkdir docs
           cp -r target/chaintest/* docs/
-
+      # Display Report
       - name: Deploy test report
         uses: peaceiris/actions-gh-pages@v3
         with:

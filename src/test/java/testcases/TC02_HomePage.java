@@ -28,7 +28,7 @@ public class TC02_HomePage extends TestBase{
             Assert.assertTrue(new P02_HomePage(getDriver()).successMesssage(getItemByIndex(i)));
         }
     }
-    @Test(priority = 2, description = "Create New PIM empolyee")
+    @Test(priority = 2, description = "Create a New PIM empolyee")
     public void validateCreateNewPIM_P() throws IOException, ParseException, InterruptedException {
         new P01_LoginPage(getDriver()).fillUserName(user).fillPassword(password);
         new P01_LoginPage(getDriver()).clickLoginButton();
@@ -38,7 +38,7 @@ public class TC02_HomePage extends TestBase{
         Assert.assertTrue(new P02_HomePage(getDriver()).PIMaddingSuccessfully());
     }
 
-    @Test(priority = 3, description = "Make New PIM as admin")
+    @Test(priority = 3, description = "Make a New PIM as admin")
     public void validateCreateAdmin_P() throws Exception {
         loadJsonData("src\\test\\resources\\TestData\\testData.json");
         new P02_HomePage(getDriver()).createAdminPIM(getValue("firstName"),getValue("firstName"),getValue("password"));

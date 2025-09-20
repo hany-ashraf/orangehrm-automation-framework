@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - TestGitHubPages
+permissions:
+    contents: write   # ✅ allow pushing to gh-pages
 
 jobs:
   test-and-deploy:

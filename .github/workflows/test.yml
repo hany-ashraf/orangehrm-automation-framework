@@ -1,22 +1,38 @@
-name: Deploy Reports
+name: Run Tests and Deploy ChainTest Report
+
 on:
   push:
     branches:
       - TestGitHubPages
 
 jobs:
-  deploy:
+  test-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
+      # 1. Checkout repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Allure
-        run: sudo apt-get install -y allure
+      # 2. Setup JDK (adjust version if needed)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: Generate Report
-        run: allure generate allure-results --clean -o docs
+      # 3. Run your tests with Maven
+      - name: Run Tests
+        run: mvn clean test
 
+      # 4. Copy ChainTest report into docs/
+      - name: Prepare Report
+        run: |
+          rm -rf docs
+          mkdir docs
+          cp -r target/chaintest-report/* docs/
+
+      # 5. Deploy report to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

@@ -1,27 +1,24 @@
-name: Run Selenium Test on Safari
-
+name: Deploy Reports
 on:
   push:
-    branches: [ "safari-tests" ]
-  workflow_dispatch:   # lets you trigger manually from GitHub Actions tab
+    branches:
+      - TestGitHubPages
 
 jobs:
-  test-safari:
-    runs-on: macos-latest
+  deploy:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - name: Install Allure
+        run: sudo apt-get install -y allure
+
+      - name: Generate Report
+        run: allure generate allure-results --clean -o docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Enable Safari Driver
-        run: |
-          sudo safaridriver --enable
-          safaridriver --version
-
-      - name: Run Specific Test
-        run: mvn clean verify #-Dtest=testcases.TC01_CheckLogin#validateWithLoginData_P -Dbrowser=safari
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs

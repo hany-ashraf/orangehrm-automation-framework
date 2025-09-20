@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - TestGitHubPages
+
 permissions:
-    contents: write   # ✅ allow pushing to gh-pages
+  contents: write   # ✅ allow pushing to gh-pages
 
 jobs:
   test-and-deploy:
@@ -33,9 +34,10 @@ jobs:
           rm -rf docs
           mkdir docs
           cp -r target/chaintest/* docs/
-      # Display Report
+
+      # 5. Deploy test report from docs/
       - name: Deploy test report
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./allure-report   # 👈 path to your built report
+          publish_dir: ./docs   # 👈 publish the folder where your report is

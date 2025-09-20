@@ -6,7 +6,7 @@
     <parameter name="browser" value="safari"/>
 
     <parameter name="URL" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>
-    <test verbose = "2" preserve-order = "true" name="Check login with correct credential">
+    <test verbose = "3" preserve-order = "true" name="Check login with correct credential">
         <classes>
             <class name="testcases.TC01_CheckLogin">
                 <methods>

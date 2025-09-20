@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <!-- File Appender -->
+        <File name="FileAppender" fileName="logs/test-execution.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+
+        <!-- Rolling File Appender for Test Failures -->
+        <RollingFile name="FailureLog" fileName="logs/test-failures.log"
+                     filePattern="logs/test-failures-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+
+        <!-- HTML Report Appender -->
+        <File name="HtmlAppender" fileName="logs/test-report.html">
+            <HTMLLayout title="Test Execution Report"/>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <!-- Specific logger for test failures -->
+        <Logger name="TestFailureLogger" level="ERROR" additivity="false">
+            <AppenderRef ref="FailureLog"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Screenshot logger -->
+        <Logger name="ScreenshotLogger" level="INFO" additivity="false">
+            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Root logger -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="HtmlAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

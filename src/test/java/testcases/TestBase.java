@@ -1,85 +1,123 @@
 package testcases;
 
-import common.MyScreenRecorder;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.edge.EdgeDriver;
+import com.aventstack.chaintest.plugins.ChainTestListener;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
+import com.github.javafaker.Faker;
+import drivers.DriverFactory;
+import listeners.TestExecustionListener;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.testng.ITestResult;
+import org.testng.Reporter;
 import org.testng.annotations.*;
-import util.Utility;
+import org.testng.asserts.SoftAssert;
 
-import java.time.Duration;
+import java.awt.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
-import static drivers.DriverFactory.getNewInstance;
 import static drivers.DriverHolder.getDriver;
 import static drivers.DriverHolder.setDriver;
-import static pages.BasePage.*;
-//import static util.Utility.emulateNetwork;
+import static pages.PageBase.quitBrowser;
 import static util.Utility.openBrowserNetworkTab;
 
+@Listeners({ChainTestListener.class, TestExecustionListener.class})
 public class TestBase {
+    SoftAssert softAssert = new SoftAssert();
+    Faker faker = new Faker();
 
-    private DevTools devTools;
+    // logger
+    private static final Logger logger = LogManager.getLogger(TestBase.class);
+
+    // extend report
+    protected static ExtentSparkReporter htmlReporter;
+    protected static ExtentReports extent;
+    protected static ExtentTest test;
+    private static String PROJECT_NAME = null;
+
+    private static String PROJECT_URL = null;
+    static Properties prop;
+    static FileInputStream readProperty;
+    protected String lang;
 
     @BeforeSuite
-    public void startRecording() throws Exception {
-        //Start recording
-        MyScreenRecorder.startRecording("Login_Test");
+    public void beforeSuite() throws Exception {
+
+        // initialize the HtmlReporter
+        htmlReporter = new ExtentSparkReporter(System.getProperty("user.dir") + "/testReport.html");
+
+        //initialize ExtentReports and attach the HtmlReporter
+        extent = new ExtentReports();
+        extent.attachReporter(htmlReporter);
+
+        setProjectDetails();
+
+        // initialize test
+        test = extent.createTest(PROJECT_NAME + " Test Automation Project");
+
+        //configuration items to change the look and fee add content, manage tests etc
+        htmlReporter.config().setDocumentTitle(PROJECT_NAME + " Test Automation Report");
+        htmlReporter.config().setReportName(PROJECT_NAME + " Test Report");
+        htmlReporter.config().setTheme(Theme.STANDARD);
+        htmlReporter.config().setTimeStampFormat("EEEE, MMMM dd, yyyy, hh:mm a '('zzz')'");
     }
 
-    @Parameters({"browser", "device"})
+    private void setProjectDetails() throws IOException {
+        // TODO: Step1: define object of properties file
+        readProperty = new FileInputStream(
+                System.getProperty("user.dir") + "/src/test/resources/properties/environment.properties");
+        prop = new Properties();
+        prop.load(readProperty);
+
+        // define project name from properties file
+        PROJECT_NAME = prop.getProperty("projectName");
+        PROJECT_URL = prop.getProperty("url");
+    }
+
+
+    @Parameters("browsername")
     @BeforeTest
-    public void setupDriver(@Optional String browser, @Optional String device) throws Exception {
-
-        if (browser == null) browser = "";
-
-        setDriver(getNewInstance(browser));
-
-
-    /*    if (device != null && !device.equalsIgnoreCase("desktop") && !device.isEmpty()) {
-            // Use mobile emulation with device from XML
-            setDriver(Utility.createMobileDriver(device));
-        } else {
-            // Use normal browser
-            setDriver(getNewInstance(browser));
-        }*/
-
-        // 2. Create DevTools session
-        //devTools = ((HasDevTools) getDriver()).getDevTools();
-        //devTools.createSession();
-
-        //emulateNetwork(devTools, networkType);
+    public void OpenBrower(@Optional String browsername) throws AWTException {
+        lang = browsername;
+        // setDriver(DriverFactory.getNewInstance(browsername));
+        setDriver(DriverFactory.getNewInstance(browsername));
 
 
-        // implicit wait
-//        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        logger.info("Starting Browser");
+        getDriver().get(PROJECT_URL);
 
-        getDriver().get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
-
-        //TODO: Open network tap to monitor APIs
+        // open browser network
         //openBrowserNetworkTab();
     }
 
-    //TODO: Back again to the home page
-    public void clickBack() {
-        getDriver().navigate().back();
-    }
-
-    //TODO: Refresh the page
-    public void clickRefreshTwice() {
-        getDriver().navigate().refresh();
-        getDriver().navigate().refresh();
-    }
-
-
     @AfterTest
-    public void tearDown() {
-        getDriver().quit();
+    public void TearDown() {
+
+        logger.info("close browser");
+        quitBrowser(getDriver());
+    }
+
+    @AfterMethod
+    public void getResult(ITestResult result) {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            test.log(Status.FAIL, result.getName() + " failed with the following error: " + result.getThrowable());
+            Reporter.log("Failed to perform " + result.getName(), 10, true);
+        } else if (result.getStatus() == ITestResult.SUCCESS) {
+            test.log(Status.PASS, result.getName());
+            Reporter.log("Successfully perform " + result.getName(), 10, true);
+        } else {
+            test.log(Status.SKIP, result.getName());
+            Reporter.log("Skip " + result.getName(), 10, true);
+        }
     }
 
     @AfterSuite
-    public void stopRecording() throws Exception {
-        //Stop recording
-        MyScreenRecorder.stopRecording();
+    public void afterSuite() throws Exception {
+        extent.flush();
     }
 }

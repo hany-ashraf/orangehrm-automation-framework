@@ -8,8 +8,10 @@ import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +21,18 @@ public class DriverFactory {
         ChromeOptions chromeOptions;
         DesiredCapabilities capabilities;
         Map<String, Object> prefs;
+        ThreadLocal<RemoteWebDriver> driver = null;
         switch (browserName.toLowerCase()) {
+            case "grid":
+                driver = new ThreadLocal<>();
+                DesiredCapabilities caps = new DesiredCapabilities();
+                caps.setCapability("browserName", "firefox");
+                try {
+                    driver.set(new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), caps));
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
+                return driver.get();
             case "chrome-headless":
                 chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--headless");
@@ -39,9 +52,34 @@ public class DriverFactory {
                 return new FirefoxDriver(firefoxOptions);
             case "edge":
                 return new EdgeDriver();
+            case "fr":
+                chromeOptions = new ChromeOptions();
+                // TODO: handle browsers options
+                prefs = new HashMap<String, Object>();
+                prefs.put("credentials_enable_service", false);
+                prefs.put("profile.password_manager_enabled", false);
+                prefs.put("profile.default_content_setting_values.notifications", 2);
+                // Disable Chrome automation detection
+                chromeOptions.addArguments("--disable-blink-features=AutomationControlled");
+                chromeOptions.setExperimentalOption("useAutomationExtension", false);
+                // Disable loading images for faster crawling
+                chromeOptions.addArguments("--blink-settings=imagesEnabled=false");
+                // Optionally add more obfuscation, like custom user agent
+                chromeOptions.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
+                chromeOptions.addArguments("start-maximized");
+                chromeOptions.addArguments("--incognito");
+                chromeOptions.addArguments("--disable-web-security");
+                chromeOptions.addArguments("--no-proxy-server");
+                chromeOptions.addArguments("--remote-allow-origins=*");
+                chromeOptions.addArguments("--disable-notifications");
+                chromeOptions.addArguments("--lang=fr");
+                chromeOptions.setExperimentalOption("prefs", prefs);
+                chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+                capabilities = new DesiredCapabilities();
+                capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+                chromeOptions.merge(capabilities);
+                return new ChromeDriver(chromeOptions);
 
-            case "safari":
-                return new SafariDriver();
             default:
                 chromeOptions = new ChromeOptions();
                 // TODO: handle browsers options
@@ -49,13 +87,13 @@ public class DriverFactory {
                 prefs.put("credentials_enable_service", false);
                 prefs.put("profile.password_manager_enabled", false);
                 prefs.put("profile.default_content_setting_values.notifications", 2);
-
+                // Disable Chrome automation detection
+                chromeOptions.addArguments("--disable-blink-features=AutomationControlled");
+                chromeOptions.setExperimentalOption("useAutomationExtension", false);
                 // Disable loading images for faster crawling
 //                chromeOptions.addArguments("--blink-settings=imagesEnabled=false");
-
                 // Optionally add more obfuscation, like custom user agent
                 chromeOptions.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
-
                 chromeOptions.addArguments("start-maximized");
                 chromeOptions.addArguments("--incognito");
                 chromeOptions.addArguments("--disable-web-security");
@@ -64,13 +102,12 @@ public class DriverFactory {
                 chromeOptions.addArguments("--disable-notifications");
                 chromeOptions.setExperimentalOption("prefs", prefs);
                 chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-
                 capabilities = new DesiredCapabilities();
                 capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
                 chromeOptions.merge(capabilities);
-
                 return new ChromeDriver(chromeOptions);
-
         }
     }
+
+
 }

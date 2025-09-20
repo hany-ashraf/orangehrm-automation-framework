@@ -9,9 +9,13 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import util.Utility;
+
 import static util.Utility.extractNumber;
 
-public class P02_HomePage extends BasePage {
+
+public class P02_HomePage extends PageBase {
 
     private static int count = 1;
     Robot robot;
@@ -55,30 +59,29 @@ public class P02_HomePage extends BasePage {
 
     //Action Methods
     public P02_HomePage clickLeftList() throws InterruptedException {
+        longWait(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//ul/li/a)[" + count + "]")));
         driver.findElement(By.xpath("(//ul/li/a)[" + count + "]")).click();
         count++;
         return this;
     }
 
     public boolean successMesssage(String subMain) {
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.messageDashboard));
         return subMain.equals(driver.findElement(messageDashboard).getText());
     }
 
     public P02_HomePage maintenancePage(String pass) {
         driver.findElement(maintenanceLogin).sendKeys(pass);
-        driver.findElement(confirmLoginMaintenance).click();
+        longWait(ExpectedConditions.elementToBeClickable(this.confirmLoginMaintenance)).click();
         return this;
     }
 
     public P02_HomePage createNewPIM(String firstName, String middleName, String lastName, String empolyeeID, String filePath) throws InterruptedException {
-        driver.findElement(PIM).click();
-        Thread.sleep(2000);
-        driver.findElement(addPIMbutton).click();
-        Thread.sleep(2000);
-        driver.findElement(uploadPhoto).click();
+        longWait(ExpectedConditions.elementToBeClickable(this.PIM)).click();
+        longWait(ExpectedConditions.elementToBeClickable(this.addPIMbutton)).click();
+        longWait(ExpectedConditions.elementToBeClickable(this.uploadPhoto)).click();
         StringSelection fPath = new StringSelection(filePath);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fPath, null);
-
         try {
             robot = new Robot();
         } catch (AWTException e) {
@@ -95,90 +98,102 @@ public class P02_HomePage extends BasePage {
         // Press Enter
         robot.keyPress(KeyEvent.VK_ENTER);
         robot.keyRelease(KeyEvent.VK_ENTER);
-        Thread.sleep(4000);
+        //Thread.sleep(4000);
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.userNameEmpolyee));
         driver.findElement(userNameEmpolyee).sendKeys(firstName);
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.middleNameEmpolyee));
         driver.findElement(middleNameEmpolyee).sendKeys(middleName);
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.lastNameEmpolyee));
         driver.findElement(lastNameEmpolyee).sendKeys(lastName);
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.empolyeeID));
         driver.findElement(this.empolyeeID).clear();
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.empolyeeID));
         driver.findElement(this.empolyeeID).sendKeys(empolyeeID);
-        driver.findElement(saveButton).click();
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.saveButton));
+        Thread.sleep(5000);
+        longWait(ExpectedConditions.elementToBeClickable(this.saveButton)).click();
+        Thread.sleep(5000);
+
+        setImplicitWait(500);
         return this;
     }
 
     public boolean successMesssagePIM(String message) {
-        System.out.println(driver.findElement(successMessage).getText());
         return message.equals(driver.findElement(successMessage).getText());
     }
 
     public P02_HomePage confirmPIMsavedSuccessfully(String PIMname) throws InterruptedException {
-        driver.findElement(PIMButton).click();
-        Thread.sleep(2000);
+        longWait(ExpectedConditions.elementToBeClickable(this.PIMButton)).click();
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.namePIM));
         WebElement input = driver.findElement(namePIM);
         // type the text
         input.sendKeys(PIMname);
-        // wait for suggestions to load (better with WebDriverWait)
-        Thread.sleep(2000);
+        //Thread.sleep(2000);
+        //
+        longWait(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@role='listbox']//div[normalize-space()='Ahmed1234 1234Ali 1234Shady']")));
+
         // press arrow down to highlight the first suggestion
         input.sendKeys(Keys.ARROW_DOWN);
         // press enter to select
         input.sendKeys(Keys.ENTER);
-
-        driver.findElement(searchButton).click();
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.searchButton));
+        longWait(ExpectedConditions.elementToBeClickable(this.searchButton)).click();
         return this;
     }
 
     public boolean PIMaddingSuccessfully() throws InterruptedException {
-        Thread.sleep(3000);
+        longWait(ExpectedConditions.visibilityOfElementLocated(numRecords));
         return extractNumber(driver.findElement(numRecords).getText()).equals("1");
     }
 
     public P02_HomePage createAdminPIM(String employName, String userName, String password) throws Exception {
-        driver.findElement(admin).click();
-        driver.findElement(addPIMbutton).click();
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.admin));
+        longWait(ExpectedConditions.elementToBeClickable(this.admin)).click();
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.addPIMbutton));
+        longWait(ExpectedConditions.elementToBeClickable(this.addPIMbutton)).click();
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.userRole));
         selectWithRobot(userRole,1);
-
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.employeeName));
         WebElement input = driver.findElement(this.employeeName);
         // type the text
         input.sendKeys(employName);
         // wait for suggestions to load (better with WebDriverWait)
-        Thread.sleep(2000);
         // press arrow down to highlight the first suggestion
         input.sendKeys(Keys.ARROW_DOWN);
         // press enter to select
         input.sendKeys(Keys.ENTER);
-
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.status));
         selectWithRobot(status,1);
 
         driver.findElement(this.userName).sendKeys(userName);
         driver.findElement(this.password).sendKeys(password);
         driver.findElement(confirmPassword).sendKeys(password);
-        Thread.sleep(2000);
-        driver.findElement(adminSaveButton).click();
-        Thread.sleep(4000);
+        longWait(ExpectedConditions.elementToBeClickable(this.adminSaveButton)).click();
         return this;
     }
 
     public P02_HomePage confirmAdminsavedSuccessfully(String employName) throws InterruptedException {
-        driver.findElement(admin).click();
-        Thread.sleep(2000);
-        WebElement input = driver.findElement(namePIM);
-        // type the text
+        // Wait for Admin tab and click
+        longWait(ExpectedConditions.elementToBeClickable(this.admin)).click();
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.namePIM));
+        // Wait for input field
+        WebElement input = longWait(ExpectedConditions.visibilityOfElementLocated(this.namePIM));
+        // Type the employee name
         input.sendKeys(employName);
-        // wait for suggestions to load (better with WebDriverWait)
-        Thread.sleep(2000);
-        // press arrow down to highlight the first suggestion
-        input.sendKeys(Keys.ARROW_DOWN);
-        // press enter to select
-        input.sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
-        driver.findElement(searchButton).click();
-        Thread.sleep(4000);
+        // Wait for suggestions dropdown to appear (instead of Thread.sleep)
+        longWait(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@role='listbox']//div[1]")));
+        // Use Selenium's Keys (no Robot)
+        input.sendKeys(Keys.ARROW_DOWN); // highlight first suggestion
+        input.sendKeys(Keys.ENTER);      // select it
+        // Wait for search button and click
+        longWait(ExpectedConditions.elementToBeClickable(this.searchButton)).click();
         return this;
     }
 
+
     public boolean adminAddingSuccessfully() throws InterruptedException {
-        Thread.sleep(4000);
-        return extractNumber(driver.findElement(numRecords).getText()).equals("1");
+        longWait(ExpectedConditions.visibilityOfElementLocated(this.numRecords));
+        return extractNumber(driver.findElement(this.numRecords).getText()).equals("1");
     }
 
 

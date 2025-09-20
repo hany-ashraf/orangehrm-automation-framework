@@ -6,13 +6,14 @@ import org.monte.media.FormatKeys.MediaType;
 import org.monte.media.Registry;
 import org.monte.media.math.Rational;
 import org.monte.screenrecorder.ScreenRecorder;
-import org.openqa.selenium.devtools.DevTools;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static org.monte.media.AudioFormatKeys.*;
 import static org.monte.media.AudioFormatKeys.EncodingKey;
 import static org.monte.media.AudioFormatKeys.FrameRateKey;
 import static org.monte.media.AudioFormatKeys.KeyFrameIntervalKey;
@@ -24,7 +25,6 @@ import static org.monte.media.VideoFormatKeys.*;
 public class MyScreenRecorder extends ScreenRecorder {
     public static ScreenRecorder screenRecorder;
     public String name;
-    public DevTools devTools;
 
     public MyScreenRecorder(GraphicsConfiguration cfg, Rectangle captureArea, Format fileFormat,
                             Format screenFormat, Format mouseFormat, Format audioFormat, File movieFolder, String name)
@@ -76,6 +76,4 @@ public class MyScreenRecorder extends ScreenRecorder {
     public static void stopRecording() throws Exception {
         screenRecorder.stop();
     }
-
-
 }
